@@ -21,14 +21,23 @@
     <main class="container">
       <div class="jumbotron">
         <h1 class="display-4">About Me</h1>
-        <p class="lead">This assignment was created by Tim Barnes. It was created as the first assignment for COMP3512.</p><!-- Insert hidden purple monkey dishwasher reference -->
+        <p class="lead">This assignment was created by Tim Barnes. This is a hypothetical site created as assignment 2 for COMP3512 at MRU taught by Randy Connolly.</p><!-- Insert hidden purple monkey dishwasher reference -->
         <hr class="my-4">
         <h3>External Sources Used</h3>
         <ul class="list-group">
           <li class="list-group-item"><a target="_blank" href="https://getbootstrap.com">Boostrap</a></li>
-          <li class="list-group-item"><a target="_blank" href="https://github.com/rconnolly/comp3512-w2018-assign1">Project start code on GitHub</a></li>
-          <li class="list-group-item"><a target="_blank" href="http://asd.calgarywebdev.xyz">Super illegal copy of Web Fundamentals Textbook</a></li>
+          <li class="list-group-item"><a target="_blank" href="https://github.com/rconnolly/comp3512-w2018-assign1">ASG1 start code on GitHub</a></li>
+          <li class="list-group-item"><a target="_blank" href="https://ide.c9.io/timbcbarnes/comp3512-asg1">ASG1 finished code on Cloud9</a></li>
+          <li class="list-group-item"><a target="_blank" href="#">Web Fundamentals Textbook</a></li>
           <li class="list-group-item"><a target="_blank" href="http://php.net/manual/en/intro-whatis.php">PHP Official Documentation</a></li>
+        </ul>
+        <h3>Group Members</h3>
+        <ul class="list-group">
+          <li class="list-group-item">Tim Barnes</li>
+        </ul>
+        <h3>GitHub Link</h3>
+        <ul class="list-group">
+          <li class="list-group-item"><a target="_blank" href="https://github.com/tbcbarnes/comp3512-asg2">https://github.com/tbcbarnes/comp3512-asg2</a></li>
         </ul>
       </div>
     </main>

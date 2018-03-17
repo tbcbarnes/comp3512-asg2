@@ -35,16 +35,18 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="browse-countries.php">Countries</a></li>
+                                <li><a href="browse-cities.php">Cities</a></li>
                                 <li><a href="browse-users.php">Users</a></li>
+                                <li><a href="browse-posts.php">Posts</a></li>
                                 <li><a href="browse-images.php">Images</a></li>
                             </ul>
                         </li>
                     </ul>
 
 
-                    <form class="navbar-form navbar-right" role="search">
+                    <form class="navbar-form navbar-right" role="search" action="browse-images.php" method="GET">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input name="searchQuery" type="text" class="form-control" placeholder="Search">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

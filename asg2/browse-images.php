@@ -13,6 +13,7 @@ $v1 = isset($_GET['continent']) && !empty($_GET['continent']) && $_GET['continen
 $v2 = isset($_GET['country']) && !empty($_GET['country']) && $_GET['country'] != "0";
 $v3 = isset($_GET['title']) && !empty($_GET['title']) && $_GET['title'] != "0";
 $v4 = isset($_GET['city']) && !empty($_GET['city']) && $_GET['city'] != "0";
+$vSearch = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $searchString = "";
 if($v1) {
   $searchString .= "Continent".'='.$_GET['continent'];
@@ -39,6 +40,9 @@ if($v4 && $result) {
 }
 else {
   $searchString .= ', City=ALL';
+}
+if($vSearch) {
+  $searchString = "Search Results for: ".$_GET['searchQuery'];
 }
 ?>
 
@@ -121,7 +125,7 @@ else {
             </select> 
             <input type="text"  placeholder="Search title" class="form-control" name=title<?php if($v3) {echo ' value="'.$_GET['title'].'"';}?> >
             <button type="submit" class="btn btn-primary">Filter</button>
-            <?php if($v1 || $v2 || $v3 || $v4) {
+            <?php if($v1 || $v2 || $v3 || $v4 || $vSearch) {
               echo '<a href="browse-images.php" class="btn btn-success">Clear</a>';
             } ?>
             </div>
@@ -153,7 +157,13 @@ else {
                   $params .= ' CityCode = "'.$_GET['city'].'"';
                 }
               }
-              $result = $pdoClass->exSelect("ImageID,Path,Title","ImageDetails",$params,"");
+              $result="";
+              if($vSearch) {
+                $result = $pdoClass->exSelect("ImageID,Path,Title","ImageDetails",'WHERE Title LIKE "%'.$_GET['searchQuery'].'%" OR Description LIKE "%'.$_GET['searchQuery'].'%"',"");
+              }  
+              else {
+                $result = $pdoClass->exSelect("ImageID,Path,Title","ImageDetails",$params,"");
+              }
               echo genImageList($result);
              ?>
           </ul>

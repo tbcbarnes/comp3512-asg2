@@ -18,3 +18,10 @@
 .jumbotron h1 {
     font-size: 2em;
 }
+
+#map {
+    width: 90%;
+    height: 300px;
+    background-color: grey;
+    margin: 10px auto 10px auto;
+}
