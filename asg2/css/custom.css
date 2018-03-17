@@ -1,0 +1,20 @@
+.card {
+    background-color: white;
+    border: 1px solid grey;
+    box-shadow: 5px 5px 2.5px grey;
+    margin-bottom: 10px;
+}
+.card-block {
+    padding-left: 5px;
+}
+.card img {
+    width:100%;
+}
+
+.jumbotron p {
+    font-size: 1em;
+}
+
+.jumbotron h1 {
+    font-size: 2em;
+}
