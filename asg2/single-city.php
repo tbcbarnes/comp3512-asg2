@@ -1,31 +1,25 @@
 <?php
-require 'includes/dbconn.inc.php';
-require 'includes/helper.inc.php';
-if(!isset($pdoClass)) {
-  try {
-      $pdoClass = new db_functions();
-  }
-  catch(Exception $e) {
-    die($e->getMessage());
-  }
+session_start();
+require_once 'includes/helper.inc.php';
+$help = new Helper();
+$isLoggedIn = false;
+if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+    $isLoggedIn = true;
+}
+$favourites;
+if(isset($_SESSION['favourites']) && !empty($_SESSION['favourites'])) {
+    $favourites = unserialize($_SESSION['favourites']);
 }
 if(isset($_GET['id'])) {
-  $result = $pdoClass->exSelect("a.*,b.CountryName","Cities as a JOIN Countries as b ON a.CountryCodeISO=b.ISO","WHERE a.CityCode=?",array($_GET['id']));
-  $record = $result->fetch();
-  if(!$record) {
-    header("Location: error.php");
-  }
+  $record = $help->getCity($_GET['id'])[0];
 }
-$imgResults = $pdoClass->exSelect("*","ImageDetails","WHERE CityCode = ?",array($_GET['id']));
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title><?php echo $record['AsciiName']; ?></title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
@@ -33,16 +27,9 @@ $imgResults = $pdoClass->exSelect("*","ImageDetails","WHERE CityCode = ?",array(
     <link rel="stylesheet" href="css/captions.css" />
     <link rel="stylesheet" href="css/bootstrap-theme.css" />    
     <link rel="stylesheet" href="css/custom.css" /> 
-
-
-
 </head>
-
 <body>
-    <?php require 'includes/header.inc.php'; ?>
-    
-
-
+    <?php require_once 'includes/header.inc.php'; ?>
     <!-- Page Content -->
     <main>
       <div class="container">
@@ -68,7 +55,7 @@ $imgResults = $pdoClass->exSelect("*","ImageDetails","WHERE CityCode = ?",array(
               <div class="panel-body">
                 <ul class="caption-style-2">
                   <?php
-                    echo genImageList($imgResults);
+                    echo $help->genImagesCity($record['CityCode']);
                   ?>
                 </ul>
               </div>
@@ -77,15 +64,6 @@ $imgResults = $pdoClass->exSelect("*","ImageDetails","WHERE CityCode = ?",array(
         </div>
       </div>
     </main>
-    
-    <footer>
-      <?php include 'includes/footer.inc.php'; ?>
-    </footer>
-
-
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
+      <?php require_once 'includes/footer.inc.php'; ?>
 </body>
-
 </html>

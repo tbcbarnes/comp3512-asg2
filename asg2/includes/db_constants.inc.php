@@ -9,6 +9,4 @@ define('DBNAME', 'travel');
 define('DBUSER', 'timbcbarnes');
 define('DBPASS', '');
 define('DBCONNSTRING','mysql:dbname='.DBNAME.';host='.DBHOST.';charset=utf8mb4;');
-define('POPULARMODE', 'MOST');  # accepted values MOST or ALPHA
-                                # empty string results in no sorting
 ?>

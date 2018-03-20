@@ -3,9 +3,9 @@
             <div class="container">
                 <div class="pull-right">
                     <ul class="list-inline">
-                        <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-star"></span> Favorites</a></li>
+                        <li><a href="login.php"><span class="glyphicon glyphicon-log-out"></span><?php if($isLoggedIn){echo' Logout';}else{echo' Login';} ?></a></li>
+                        <li><a href="user-profile.php"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                        <li><a href="favourites.php"><span class="glyphicon glyphicon-star"></span> Favorites</a></li>
                     </ul>
                 </div>
             </div>

@@ -1,18 +1,19 @@
 <?php
-require_once 'includes/dbconn.inc.php';
+session_start();
 require_once 'includes/helper.inc.php';
-if(!isset($pdoClass)) {
-  try {
-      $pdoClass = new db_functions();
-  }
-  catch(Exception $e) {
-    die($e->getMessage());
-  }
+$help = new Helper();
+$isLoggedIn = false;
+if(isset($_SESSION['user']) && !empty($_SESSION['user'])) {
+    $isLoggedIn = true;
 }
+$favourites;
+if(isset($_SESSION['favourites']) && !empty($_SESSION['favourites'])) {
+    $favourites = unserialize($_SESSION['favourites']);
+}
+$image;
 if(isset($_GET['id'])) {
-  $result = $pdoClass->exSelect("*","ImageDetails as a JOIN Users as b ON a.UserID=b.UserID JOIN Countries ON CountryCodeISO=ISO JOIN Cities as c ON a.CityCode=c.CityCode","WHERE ImageID=?",array($_GET['id']));
-  $record = $result->fetch();
-  if(!$record) {
+  $image = $help->getImage($_GET['id']);
+  if(!$image) {
     header("Location: error.php");
   }
 }
@@ -22,7 +23,7 @@ if(isset($_GET['id'])) {
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo $record['Title']; ?></title>
+    <title><?php echo $image['Title']; ?></title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
@@ -39,21 +40,21 @@ if(isset($_GET['id'])) {
     <!-- Page Content -->
     <main class="container">
         <div class="row">
-            <?php require 'includes/left.inc.php'; ?>
+            <?php require_once 'includes/left.inc.php'; ?>
             <div class="col-md-10">
                 <div class="row">
                     <div class="col-md-8">                                                
-                        <img class="img-responsive" src="images/medium/<?php echo $record['Path']; ?>" alt="<?php echo $record['Title']; ?>">
-                        <h3><?php echo $record['Title']; ?></h3>
-                        <p><?php echo $record['Description']; ?></p>
+                        <img class="img-responsive" src="images/medium/<?php echo $image['Path']; ?>" alt="<?php echo $image['Title']; ?>">
+                        <h3><?php echo $image['Title']; ?></h3>
+                        <p><?php echo $image['Description']; ?></p>
                     </div>
                     <div class="col-md-4">                                                
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <ul class="details-list">
-                                    <li>By: <a href="single-user.php?id=<?php echo $record['UserID']; ?>"><?php echo $record['FirstName'].' '.$record['LastName']; ?></a></li>
-                                    <li>Country: <a href="single-country.php?id=<?php echo $record['CountryCodeISO']; ?>"><?php echo $record['CountryName']; ?></a></li>
-                                    <li>City: <a href="single-city.php?id=<?php echo $record['CityCode']; ?>"><?php echo $record['AsciiName']; ?></a></li>
+                                    <li>By: <a href="single-user.php?id=<?php echo $image['UserID']; ?>"><?php echo $image['FirstName'].' '.$image['LastName']; ?></a></li>
+                                    <li>Country: <a href="single-country.php?id=<?php echo $image['CountryCodeISO']; ?>"><?php echo $image['CountryName']; ?></a></li>
+                                    <li>City: <a href="single-city.php?id=<?php echo $image['CityCode']; ?>"><?php echo $image['AsciiName']; ?></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -61,15 +62,17 @@ if(isset($_GET['id'])) {
                             <div class="panel-body">
                                 <p class="ratings">Rating: 
                                 <?php 
-                                $results= $pdoClass->exSelect("*","ImageRating","WHERE ImageID = ?",array($record['ImageID']));
-                                echo genRatingList($results);
+                                echo $help->genRatingList($image['ImageID']);
                                 ?>
                                 </p>
                             </div>
                         </div>
                         <div class="btn-group btn-group-justified" role="group" aria-label="...">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                                <form action="favourites.php" method="POST">
+                                    <input type="hidden" name="addimage" value="<?php echo $image['ImageID']; ?>">
+                                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+                                </form>
                             </div>
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
@@ -90,16 +93,12 @@ if(isset($_GET['id'])) {
         </div>
     </main>
     
-    <footer>
-        <?php require 'includes/footer.inc.php'; ?>
-    </footer>
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <?php require_once 'includes/footer.inc.php'; ?>
         <?php 
         echo '<script>
           function initMap() {
 
-            var uluru = {lat: '.$record['Latitude'].', lng: '.$record['Longitude'].'};
+            var uluru = {lat: '.$image['Latitude'].', lng: '.$image['Longitude'].'};
             var map = new google.maps.Map(document.getElementById("map"), {
               zoom: 15,
               center: uluru
